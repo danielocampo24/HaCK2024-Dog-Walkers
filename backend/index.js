@@ -83,7 +83,6 @@ client.on('connect', async () => {
     }
   });
 
-  // Subscribe to the "grab" topic
   client.subscribe('grab', (err) => {
     if (err) {
       console.error("Subscription error for 'grab': ", err);
@@ -100,7 +99,6 @@ const corsOptions = {
 APP.use(cors(corsOptions));
 APP.use(express.json());
 
-// Readings from sensors 
 let latestTemp = null;
 let latestUltrasonic = null;
 let latestHumidity = null;
@@ -108,22 +106,24 @@ let latestHumidity = null;
 io.on("connection", (socket) => {
   console.log("Frontend connected to socket");
 
-  // Send the latest sensor data to the newly connected client
   if (latestTemp) {
     socket.emit('temp', latestTemp);
   }
   if (latestUltrasonic) socket.emit('ultrasonic', latestUltrasonic);
 
-  // Listen for direction messages from the frontend
-  socket.on('send-direction', (message) => {
+  socket.on('direction', (message) => {
     console.log('Received direction message from frontend:', message);
     client.publish("direction", message);
   });
 
-  // Listen for grab messages from the frontend
   socket.on('send-grab', (message) => {
     console.log('Received grab message from frontend:', message);
     client.publish("grab", message);
+  });
+
+  socket.on('send-arm-degree', (degree) => {
+    console.log(`Received arm degree from frontend: ${degree}`);
+    client.publish("arm/degree", degree);
   });
 
   socket.on("disconnect", () => {
@@ -162,9 +162,9 @@ client.on('message', (TOPIC, payload) => {
     } else if (message === 'right') {
       console.log("Turning right");
     } else if (message === 'idle') {
-      console.log("Idle");
+      console.log("idle");
     }
   } else if (TOPIC === 'grab') {
     console.log("Grabbing");
   }
-});
+}); 

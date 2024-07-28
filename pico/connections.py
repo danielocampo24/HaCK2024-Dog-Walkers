@@ -3,7 +3,6 @@ import ssl
 from time import sleep
 
 
-
 class sslWrap:
     def __init__(self):
         self.wrap_socket = ssl.wrap_socket
