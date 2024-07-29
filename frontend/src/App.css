@@ -143,10 +143,10 @@ p {
   top: 25%;  /* This moves it up by 25% of the container's height */
   right: -25%;  /* This moves it right by 25% of the container's width */
   transform: translateX(25%);  /* This centers the div relative to its position */
-  margin-top: -200px;
+  margin-top: -250px;
 }
 
 .arrowImage img {
-  width: 115px;  /* Adjust as needed */
-  height: 115px; /* Adjust as needed */
+  width: 200px;  /* Adjust as needed */
+  height: 200px; /* Adjust as needed */
 }

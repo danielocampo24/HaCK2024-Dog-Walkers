@@ -6,10 +6,8 @@ import up from './up.png'
 import down from './down.png';
 import left from './left.png';
 import right from './right.png';
-import Container from 'react-bootstrap/Container';
-import Nav from 'react-bootstrap/Nav';
-import Navbar from 'react-bootstrap/Navbar';
-import NavDropdown from 'react-bootstrap/NavDropdown';
+import ExperienceSection from "./ExperienceSection";
+import BasicNavbar from "./BasicNavbar";
 
 
 const socket = io('http://localhost:8000');
@@ -22,7 +20,7 @@ const arrowImages = {
 };
 
 function App() {
-  const [temp, setTemp] = useState(null);
+  const [temp, setTemp] = useState('75');
   const [ultrasonic, setUltrasonic] = useState(null);
   const [humidity, setHumidity] = useState(null);
   const [movement, setMovement] = useState("Idle");
@@ -32,14 +30,25 @@ function App() {
   const [currentArrow, setCurrentArrow] = useState(null);
 
   useEffect(() => {
-    socket.on('temp', setTemp);
-    socket.on('ultrasonic', setUltrasonic);
-    socket.on('humidity', setHumidity);
+
+    // Listen for temperature updates
+    socket.on('temp', (data) => {
+      setTemp(data);
+    });
+
+    // Listen for ultrasonic updates
+    socket.on('ultrasonic', (data) => {
+      setUltrasonic(data);
+    });
+
+    socket.on('humidity', (data) => {
+      setHumidity(data);
+    });
 
     return () => {
-      socket.off('temp', setTemp);
-      socket.off('ultrasonic', setUltrasonic);
-      socket.off('humidity', setHumidity);
+      socket.off('temp');
+      socket.off('ultrasonic');
+      socket.off('humidity')
     };
   }, []);
 
@@ -119,16 +128,7 @@ function App() {
   return (
     
     <div className="App">
-      <Navbar bg="dark" data-bs-theme="dark">
-        <Container>
-          <Navbar.Brand href="#home">Navbar</Navbar.Brand>
-          <Nav className="me-auto">
-            <Nav.Link href="#home">Home</Nav.Link>
-            <Nav.Link href="#features">Our experience</Nav.Link>
-            <Nav.Link href="#pricing"></Nav.Link>
-          </Nav>
-        </Container>
-      </Navbar>
+      {/* <BasicNavbar /> */}
       <img src={logo} alt="Logo" className="logo" />
       <p>The Dogwalkers Rover Mission</p>
       <h1 className="temp">Live Camera Feed</h1>
@@ -139,6 +139,7 @@ function App() {
           <p>Humidity: {humidity}%</p>
           <p>Temperature: {temp}&deg;C</p>
           <p> Distance to rear object: cm</p>
+          <p> Distance to front object: cm</p>
           
         </div>
         <iframe src="http://192.168.50.193/" height="600" width="600" className="feed"/>
@@ -166,6 +167,8 @@ function App() {
           <button onClick={submitDegree}>Submit</button>
         </div>
       )}
+            <ExperienceSection/>
+
     </div>
   );
 }
