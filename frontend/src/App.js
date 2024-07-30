@@ -20,7 +20,7 @@ const arrowImages = {
 };
 
 function App() {
-  const [temp, setTemp] = useState('75');
+  const [temp, setTemp] = useState(null);
   const [ultrasonic, setUltrasonic] = useState(null);
   const [humidity, setHumidity] = useState(null);
   const [movement, setMovement] = useState("Idle");
@@ -138,8 +138,8 @@ function App() {
           <p className="movementText">Currently moving: {movement}</p>
           <p>Humidity: {humidity}%</p>
           <p>Temperature: {temp}&deg;C</p>
-          <p> Distance to rear object: cm</p>
-          <p> Distance to front object: cm</p>
+          <p> Distance to rear object: {ultrasonic} cm</p>
+
           
         </div>
         <iframe src="http://192.168.50.193/" height="600" width="600" className="feed"/>
